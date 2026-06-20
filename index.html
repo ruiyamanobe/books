@@ -81,7 +81,7 @@
   .empty-state{padding:40px 0;text-align:center;color:var(--ink);opacity:0.6;font-size:13px;}
 
   /* ---- simple header (form / detail / search) ---- */
-  .simple-header{background:var(--pink);position:relative;padding:20px 18px;overflow:hidden;}
+  .simple-header{background:var(--pink);position:relative;padding:calc(20px + env(safe-area-inset-top, 0px)) 18px 20px;overflow:hidden;}
   .simple-header-row{display:flex;align-items:center;gap:12px;position:relative;z-index:1;}
   .icon-btn{background:transparent;border:none;padding:4px;cursor:pointer;display:flex;align-items:center;color:var(--ink);}
   .simple-title{font-size:18px;font-weight:500;-webkit-text-stroke:0.6px var(--ink);color:var(--ink);}
@@ -132,7 +132,7 @@
 
   /* ---- export ---- */
   .export-screen{position:relative;border-radius:0;overflow:hidden;min-height:100vh;display:flex;align-items:center;justify-content:flex-start;}
-  .export-back{position:absolute;top:20px;left:18px;background:transparent;border:none;padding:4px;cursor:pointer;}
+  .export-back{position:absolute;top:calc(20px + env(safe-area-inset-top, 0px));left:18px;background:transparent;border:none;padding:4px;cursor:pointer;}
   .export-quote{font-family:Georgia,serif;font-style:italic;font-size:16px;line-height:1.45;padding:0 30px;text-align:left;}
   .export-attr{font-size:12px;opacity:0.7;margin-top:14px;padding:0 30px;text-align:left;}
   .swatch-row{position:absolute;bottom:22px;left:0;right:0;display:flex;justify-content:center;gap:8px;}
