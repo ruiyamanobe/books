@@ -3,6 +3,10 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<link rel="apple-touch-icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAAC0CAIAAACyr5FlAAABt0lEQVR4nO3SMQHAIADAMEDDnCOYGVhvdiQKenSeZw/4sm4H8F/mIJmDZA6SOUjmIJmDZA6SOUjmIJmDZA6SOUjmIJmDZA6SOUjmIJmDZA6SOUjmIJmDZA6SOUjmIJmDZA6SOUjmIJmDZA6SOUjmIJmDZA6SOUjmIJmDZA6SOUjmIJmDZA6SOUjmIJmDZA6SOUjmIJmDZA6SOUjmIJmDZA6SOUjmIJmDZA6SOUjmIJmDZA6SOUjmIJmDZA6SOUjmIJmDZA6SOUjmIJmDZA6SOUjmIJmDZA6SOUjmIJmDZA6SOUjmIJmDZA6SOUjmIJmDZA6SOUjmIJmDZA6SOUjmIJmDZA6SOUjmIJmDZA6SOUjmIJmDZA6SOUjmIJmDZA6SOUjmIJmDZA6SOUjmIJmDZA6SOUjmIJmDZA6SOUjmIJmDZA6SOUjmIJmDZA6SOUjmIJmDZA6SOUjmIJmDZA6SOUjmIJmDZA6SOUjmIJmDZA6SOUjmIJmDZA6SOUjmIJmDZA6SOUjmIJmDZA6SOUjmIJmDZA6SOUjmIJmDZA6SOUjmIJmDZA6SOUjmIJmDZA6SOUjmIJmD9AIxLAMOjkoAkgAAAABJRU5ErkJggg==" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="theme-color" content="#FF1493" />
 <title>BOOK — 독서 기록</title>
 <style>
   :root{
@@ -193,17 +197,7 @@ var STORAGE_KEY = 'booksAppData_v1';
 function seedData(){
   return {
     genreList:['문학','비문학'],
-    books:[
-      {id:'b1', list:'library', title:'아주 희미한 빛으로도', author:'최은영', rating:4.5, startDate:'2026-05-02', endDate:'2026-05-21', pageCount:320, publisher:'문학동네', year:'2023', genres:['문학'], status:'완독', quotes:['슬픔은 그 자체로 끝나지 않고, 다른 사람을 향한 마음으로 옮겨갈 때가 있다.','기억은 붙잡으려 할수록 더 빨리 흩어진다.'], memo:'두 사람의 관계가 변하는 지점을 너무 섬세하게 따라가서 계속 멈춰 읽었다. 다음에 읽을 때는 1부와 3부를 같이 묶어서 다시 봐야겠다는 생각이 들었다.'},
-      {id:'b2', list:'library', title:'슬픔의 방문', author:'서수진', rating:3.5, startDate:'2026-04-10', endDate:'2026-04-22', pageCount:268, publisher:'창비', year:'2022', genres:['문학'], status:'완독', quotes:['우리는 각자의 속도로 슬픔을 통과한다. 그 속도는 누구와도 같지 않아서, 비교하는 일은 의미가 없다고 자주 되새겼다.'], memo:''},
-      {id:'b3', list:'library', title:'소설가의 일', author:'김연수', rating:5.0, startDate:'2026-03-01', endDate:'2026-03-15', pageCount:240, publisher:'문학동네', year:'2014', genres:['비문학'], status:'완독', quotes:['쓰는 일은 결국 견디는 일과 다르지 않다고 생각했다.'], memo:''},
-      {id:'b4', list:'library', title:'밤은 부드러워', author:'에밀리 헨더슨', rating:4.0, startDate:'2026-06-01', endDate:'', pageCount:340, currentPage:140, publisher:'', year:'', genres:[], status:'읽는 중', quotes:[], memo:''}
-    ].concat([
-      {id:'w1', list:'wishlist', title:'작은 땅의 야수들', author:'김주혜', rating:0, startDate:'', endDate:'', pageCount:null, publisher:'', year:'', genres:['문학'], status:null, quotes:[], memo:''},
-      {id:'w2', list:'wishlist', title:'아몬드', author:'손원평', rating:0, startDate:'', endDate:'', pageCount:null, publisher:'', year:'', genres:['문학'], status:null, quotes:[], memo:''},
-      {id:'w3', list:'wishlist', title:'팩트풀니스', author:'한스 로슬링', rating:0, startDate:'', endDate:'', pageCount:null, publisher:'', year:'', genres:['비문학'], status:null, quotes:[], memo:''},
-      {id:'w4', list:'wishlist', title:'시선으로부터,', author:'정세랑', rating:0, startDate:'', endDate:'', pageCount:null, publisher:'', year:'', genres:['문학'], status:null, quotes:[], memo:''}
-    ])
+    books:[]
   };
 }
 
