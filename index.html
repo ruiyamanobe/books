@@ -36,8 +36,10 @@
   .ink-divider{height:1.5px;background:var(--ink);}
   .filters-pad{padding:0 18px;}
   .chips-row{display:flex;flex-wrap:wrap;column-gap:7px;row-gap:5px;margin-top:14px;}
-  .chip{font-size:12px;padding:6px 12px;border-radius:0;cursor:pointer;white-space:nowrap;border:1px solid var(--ink);background:var(--pink);color:var(--ink);}
+  .chip{position:relative;font-size:12px;padding:6px 12px;border-radius:0;cursor:pointer;white-space:nowrap;border:1px solid var(--ink);background:var(--pink);color:var(--ink);}
   .chip.active{background:var(--sky);border-color:var(--sky);color:var(--ink);}
+  .chip-dot{position:absolute;top:-3px;right:-3px;width:7px;height:7px;border-radius:50%;background:var(--ink);border:1px solid var(--pink);}
+  .reset-chip{background:transparent;display:inline-flex;align-items:center;gap:3px;opacity:0.75;}
   .sub-panel{margin-top:8px;}
   .sub-wrap{display:flex;flex-wrap:wrap;column-gap:6px;row-gap:4px;padding:8px 0;align-items:center;}
   .sub-chip{font-size:11px;padding:8px 10px;border-radius:0;cursor:pointer;white-space:nowrap;border:1px solid var(--sub-border);background:var(--pink);color:var(--ink);}
@@ -56,6 +58,7 @@
   .white-section{background:#fff;position:relative;overflow:hidden;padding:24px 18px 0;}
   .list-top-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;}
   .list-count{font-size:12px;color:var(--ink);opacity:0.7;}
+  .reveal-all-btn{font-size:11px;color:var(--pink);background:transparent;border:1px solid var(--pink);border-radius:0;padding:6px 10px;cursor:pointer;white-space:nowrap;}
   .col-toggle{display:flex;gap:4px;}
   .col-btn{background:transparent;border:none;padding:2px;display:flex;gap:2px;align-items:center;cursor:pointer;}
   .col-sq{width:9px;height:9px;background:#000;}
@@ -299,11 +302,27 @@ function buildFilterBar(listType, onChange){
     {key:'publisher', label:'출판사', type:'publisher'}
   ];
 
+  function hasActive(f){
+    if(f.key==='genre') return state.filterSelections[listType].genre.size>0;
+    if(f.key==='status') return state.filterSelections[listType].status && state.filterSelections[listType].status.size>0;
+    if(f.key==='date') return !!(state.dateRange.start || state.dateRange.end);
+    if(f.key==='publisher') return !!state.publisherQuery;
+    if(f.key==='rating') return !!state.minRating;
+    return false;
+  }
+  function anyActive(){
+    return filterDefs.some(function(f){ return f.key!=='all' && hasActive(f); });
+  }
+
   function renderChips(){
     clear(chipsRow);
     filterDefs.forEach(function(f){
-      var b = el('button','chip'+(state.filterActiveKey[listType]===f.key?' active':''), f.label);
+      var b = el('button','chip'+(state.filterActiveKey[listType]===f.key?' active':''));
       b.setAttribute('type','button');
+      b.appendChild(document.createTextNode(f.label));
+      if(f.key!=='all' && hasActive(f)){
+        b.appendChild(el('span','chip-dot'));
+      }
       b.onclick = function(){
         if(f.key==='all'){
           state.filterActiveKey[listType] = null;
@@ -319,6 +338,22 @@ function buildFilterBar(listType, onChange){
       };
       chipsRow.appendChild(b);
     });
+    if(anyActive()){
+      var resetBtn = el('button','chip reset-chip');
+      resetBtn.setAttribute('type','button');
+      resetBtn.innerHTML = icon('x',11,'var(--ink)');
+      resetBtn.appendChild(document.createTextNode(' 초기화'));
+      resetBtn.onclick = function(){
+        state.filterActiveKey[listType] = null;
+        state.filterSelections[listType].genre = new Set();
+        if(state.filterSelections[listType].status) state.filterSelections[listType].status = new Set();
+        state.dateRange = {start:'', end:''};
+        state.publisherQuery = '';
+        state.minRating = 0;
+        renderChips(); renderSub(); onChange();
+      };
+      chipsRow.appendChild(resetBtn);
+    }
   }
 
   function renderSub(){
@@ -564,11 +599,33 @@ function renderQuotesScreen(){
   var topRow = el('div','list-top-row');
   var data = getAllQuotes();
   topRow.appendChild(el('span','list-count', data.length+'개의 인용구'));
+  var rightWrap = el('div',''); rightWrap.style.display='flex'; rightWrap.style.alignItems='center'; rightWrap.style.gap='10px';
+  var revealAllBtn = el('button','reveal-all-btn');
+  revealAllBtn.setAttribute('type','button');
   var colToggleEl = el('div','col-toggle');
-  topRow.appendChild(colToggleEl);
+  rightWrap.appendChild(revealAllBtn);
+  rightWrap.appendChild(colToggleEl);
+  topRow.appendChild(rightWrap);
   whiteSection.appendChild(topRow);
   var listEl = el('div','');
   whiteSection.appendChild(listEl);
+
+  function renderRevealAllBtn(){
+    if(data.length===0){ revealAllBtn.style.display='none'; return; }
+    revealAllBtn.style.display='';
+    var allRevealed = data.every(function(q){ return !!state.revealedQuotes[quoteKey(q.bookId, q.qi)]; });
+    revealAllBtn.textContent = allRevealed ? '전체 안 보이기' : '전체 보이기';
+  }
+  revealAllBtn.onclick = function(){
+    var allRevealed = data.every(function(q){ return !!state.revealedQuotes[quoteKey(q.bookId, q.qi)]; });
+    if(allRevealed){
+      state.revealedQuotes = {};
+    } else {
+      data.forEach(function(q){ state.revealedQuotes[quoteKey(q.bookId, q.qi)] = true; });
+    }
+    renderRevealAllBtn();
+    renderQuoteList();
+  };
 
   function cellContent(q, fontSize, clamp){
     var key = quoteKey(q.bookId, q.qi);
@@ -636,10 +693,12 @@ function renderQuotesScreen(){
   function toggleReveal(q){
     var key = quoteKey(q.bookId, q.qi);
     state.revealedQuotes[key] = !state.revealedQuotes[key];
+    renderRevealAllBtn();
     renderQuoteList();
   }
 
   renderColToggle();
+  renderRevealAllBtn();
   renderQuoteList();
   container.appendChild(whiteSection);
   return container;
