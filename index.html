@@ -58,7 +58,7 @@
   .white-section{background:#fff;position:relative;overflow:hidden;padding:24px 18px 0;}
   .list-top-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;}
   .list-count{font-size:12px;color:var(--ink);opacity:0.7;}
-  .reveal-all-btn{font-size:11px;color:var(--pink);background:transparent;border:1px solid var(--pink);border-radius:0;padding:6px 10px;cursor:pointer;white-space:nowrap;}
+  .reveal-all-btn{display:flex;align-items:center;justify-content:center;width:30px;height:30px;color:var(--pink);background:transparent;border:none;border-radius:0;padding:0;cursor:pointer;}
   .col-toggle{display:flex;gap:4px;}
   .col-btn{background:transparent;border:none;padding:2px;display:flex;gap:2px;align-items:center;cursor:pointer;}
   .col-sq{width:9px;height:9px;background:#000;}
@@ -163,7 +163,9 @@ function icon(name,size,color,strokeW){
     'download':'<path d="M12 3v12M7 10l5 5 5-5"/><path d="M5 19h14"/>',
     'upload':'<path d="M12 21V9M7 14l5-5 5 5"/><path d="M5 5h14"/>',
     'pencil':'<path d="M4 20h4L20 8l-4-4L4 16v4z"/>',
-    'trash':'<path d="M4 7h16M9 7V4h6v3M6 7l1 14h10l1-14"/>'
+    'trash':'<path d="M4 7h16M9 7V4h6v3M6 7l1 14h10l1-14"/>',
+    'eye':'<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>',
+    'eye-off':'<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/><line x1="3" y1="3" x2="21" y2="21"/>'
   };
   return '<svg viewBox="0 0 24 24" width="'+size+'" height="'+size+'" fill="none" stroke="'+color+'" stroke-width="'+strokeW+'" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+(paths[name]||'')+'</svg>';
 }
@@ -614,7 +616,8 @@ function renderQuotesScreen(){
     if(data.length===0){ revealAllBtn.style.display='none'; return; }
     revealAllBtn.style.display='';
     var allRevealed = data.every(function(q){ return !!state.revealedQuotes[quoteKey(q.bookId, q.qi)]; });
-    revealAllBtn.textContent = allRevealed ? '전체 안 보이기' : '전체 보이기';
+    revealAllBtn.innerHTML = icon(allRevealed ? 'eye-off' : 'eye', 16, 'var(--pink)');
+    revealAllBtn.setAttribute('aria-label', allRevealed ? '전체 안 보이기' : '전체 보이기');
   }
   revealAllBtn.onclick = function(){
     var allRevealed = data.every(function(q){ return !!state.revealedQuotes[quoteKey(q.bookId, q.qi)]; });
